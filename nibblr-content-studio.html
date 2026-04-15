@@ -845,6 +845,7 @@ async function callClaude(prompt) {
     }
     throw new Error(err.error?.message || `API error ${res.status}`);
   }
+  console.log('Claude API response ok');
   const data = await res.json();
   return data.content?.[0]?.text || '';
 }
@@ -1061,8 +1062,9 @@ Respond in JSON only:
     const json = JSON.parse(raw.replace(/```json|```/g,'').trim());
     renderNews(json.stories);
   } catch(e) {
-    document.getElementById('news-container').innerHTML = '<div style="color:var(--rust);font-size:13px;">Error fetching digest. Try again.</div>';
+    document.getElementById('news-container').innerHTML = `<div style="color:var(--rust);font-size:13px;">Error: ${e.message}. Check the browser console (Cmd+Option+J) for details.</div>`;
     document.getElementById('news-output').classList.remove('hidden');
+    console.error('News digest error:', e);
   }
 
   btn.innerHTML = '<span class="icon">📡</span> Run News Digest';
